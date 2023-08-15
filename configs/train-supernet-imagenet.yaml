@@ -1,0 +1,71 @@
+ModelType: super
+ARCH: resnet18
+Resume: None
+super_model: /home/E21201018/code/MultiQuant+/ExpNew/imagenet/supermodel/mobilenet_v2_super.pt
+
+OUT_DIR: ../exp
+RNG_SEED: 2
+GPUS:
+  - 0
+  - 1
+
+
+DATASET:
+  data_set: imagenet
+  data_path: /data/ImageNet
+  train_batch_size: 256
+  eval_batch_size: 256
+
+SEARCH_SPACE:
+  channel_wise_list:
+    - True
+    - False
+  w_sym_list:
+    - True
+    - False
+  a_sym_list:
+    - True
+    - False
+  w_bit_list:
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+  a_bit_list:
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+
+OPTIM:
+  num_epochs: 120
+  optimizer: Adam
+  lr: 1.0e-3
+  momentum: 0.9
+  weight_decay: 0
+  use_grad_clip: True
+  grad_clip_value: 1.00
+
+
+CRITERION:
+  criterion: nn.CrossEntropyLoss()
+  soft_criterion: KLLossSoft()
+  label_smoothing: 0.1
+  kurt_rate: 0.015
+  skew_rate: 1.0
+
+quantizer: lsq
+levels: 2
+w_bit: 8
+a_bit: 8
+
+act_quant: True
+disable_8bit_head_stem: False
+num_samples: 256
+num_subnet: 3
